@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.coinchart.repository.CoinMapper">
+
+    <insert id="save">
+        insert into coin (currency_code, market, trade_price, _date)
+        values (#{currencyCode}, #{market}, #{tradePrice}, #{date})
+    </insert>
+
+    <select id="getCoin" resultType="Coin">
+        select *
+        from coin
+        where market = #{market}
+        order by _date asc
+    </select>
+
+    <select id="getCoins" resultType="Coin">
+        select *
+        from coin
+        where (market, _date) in (select market, max(_date) as _date from coin
+        group by market);
+    </select>
+
+    <insert id="saveExchange">
+        insert into exchange(currency_code, base_price, us_dollar_rate, _date, _time)
+        values (#{currencyCode}, #{basePrice}, #{usDollarRate}, #{date}, #{time})
+    </insert>
+
+    <update id="updateExchange">
+        update exchange
+        set base_price = #{basePrice}, _date = #{date}, _time = #{time}
+        where currency_code = #{currencyCode}
+    </update>
+
+    <select id="getExchange" resultType="Exchange">
+        select * from exchange where currency_code = #{currencyCode}
+    </select>
+
+    <select id="getExchanges" resultType="Exchange">
+        select *
+        from exchange;
+    </select>
+
+</mapper>
