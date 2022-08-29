@@ -13,11 +13,15 @@
 
         function drawChart() {
             const selectTicker = $('.hidden').val();
+            const selectExchange = $('.select_exchange').text();
 
             $.ajax({
                 url: 'chart/coin',
                 type: 'post',
-                data: {'ticker': selectTicker},
+                data: {
+                    'ticker': selectTicker,
+                    'exchange': selectExchange,
+                },
                 success: function (ticker) {
                     var data = new google.visualization.DataTable();
                     data.addColumn('datetime', 'Day');
@@ -29,7 +33,7 @@
                     var hours = [];
                     var minutes = [];
 
-                    for (var i = 0; i < ticker.length; i++) {
+                    for (let i = 0; i < ticker.length; i++) {
                         let date = ticker[i].date.split('-');
                         let time = ticker[i].date.split(' ')[1].split(':');
 
@@ -40,17 +44,29 @@
                         minutes.push(time[1]);
                     }
 
+                    var formatter = new google.visualization.NumberFormat({
+                        fractionDigits: 4
+                    });
+
                     let arr = new Array();
-                    for (var i = 0; i < ticker.length; i++) {
-                        arr[i] = [new Date(years[i], months[i] - 1, days[i], hours[i], minutes[i]), Math.floor(ticker[i].tradePrice)]
+                    for (let i = 0; i < ticker.length; i++) {
+
+                        let val = parseFloat(ticker[i].tradePrice);
+
+                        arr[i] = [
+                            new Date(years[i], months[i] - 1, days[i], hours[i], minutes[i]),
+                            {v: val, f: val.toFixed(4)}
+                        ]
                     }
 
                     data.addRows(arr)
 
+                    formatter.format(data, 1);
+
                     var options = {
                         chart: {
                             title: 'CHART',
-                            subtitle: `1USD : ${exchange.get("KRW")} KRW, ${exchange.get("JPY")} JPY`
+                            subtitle: `1USD : ${exchanges.get("KRW")} KRW, ${exchanges.get("JPY")} JPY`
                         },
                         width: 800,
                         height: 600,
@@ -69,7 +85,7 @@
     </script>
 </head>
 <body>
-<div class="container" style="margin-top: 100px">
+<div class="container">
     <input type="hidden" class="hidden" value="BTC"/>
     <div class="row">
         <div id="linechart_material" class="col"></div>
@@ -93,24 +109,32 @@
 
                         const exchange = $(this).text();
 
-                        if (exchange == 'USD') {
-                            $('.usd:eq(0)').addClass('select_ticker');
+                        // alert($('.select_ticker').index());
 
+                        // let index = $('.select_ticker').index();
+                        // $('.ticker').removeClass('select_ticker');
+
+                        if (exchange == 'USD') {
+                            <%--$(`.usd:eq(${index})`).addClass('select_ticker');--%>
+                            $(`.usd:eq(0)`).addClass('select_ticker');
                             $('.exchange_text').text('/USD');
                             $('.ticker').addClass('hide');
                             $('.usd').removeClass('hide');
+                            drawChart();
                         } else if (exchange == 'KRW') {
-                            $('.krw:eq(0)').addClass('select_ticker');
-
+                            <%--$(`.krw:eq(${index})`).addClass('select_ticker');--%>
+                            $(`.krw:eq(0)`).addClass('select_ticker');
                             $('.exchange_text').text('/KRW');
                             $('.ticker').addClass('hide');
                             $('.krw').removeClass('hide');
+                            drawChart();
                         } else if (exchange == 'JPY') {
-                            $('.jpy:eq(0)').addClass('select_ticker');
-
+                            <%--$(`.jpy:eq(${index})`).addClass('select_ticker');--%>
+                            $(`.jpy:eq(0)`).addClass('select_ticker');
                             $('.exchange_text').text('/JPY');
                             $('.ticker').addClass('hide');
                             $('.jpy').removeClass('hide');
+                            drawChart();
                         }
                     })
                 </script>

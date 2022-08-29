@@ -27,8 +27,21 @@ public class CoinServiceImpl implements CoinService {
     private final UpBitExchangeFeignClient upBitExchangeFeignClient;
 
     @Override
-    public List<Coin> getCoin(String market) {
-        return coinRepository.getCoin(market);
+    public List<Coin> getCoin(String market, String exchange) {
+        List<Coin> coins = coinRepository.getCoin(market);
+        Exchange dbExchange = coinRepository.getExchange(exchange);
+
+        if (exchange.equals("KRW")) { //default KRW
+            return coins;
+        } else {
+            for (Coin coin : coins) {
+                String tradePrice = String.format("%.4f", Double.parseDouble(coin.getTradePrice()) / Double.parseDouble(dbExchange.getBasePrice()));
+                coin.setCurrencyCode(exchange);
+                coin.setTradePrice(tradePrice);
+            }
+        }
+
+        return coins;
     }
 
     @Override

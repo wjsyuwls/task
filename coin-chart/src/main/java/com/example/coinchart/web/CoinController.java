@@ -27,19 +27,19 @@ public class CoinController {
         List<Coin> coins = coinService.getCoins();
         log.info("coins={}", coins);
 
-        Map<String, Double> exchange = coinService.getExchanges();
-        log.info("exchange={}", exchange);
+        Map<String, Double> exchanges = coinService.getExchanges();
+        log.info("exchange={}", exchanges);
 
         model.addAttribute("coins", coins);
-        model.addAttribute("exchange", exchange);
+        model.addAttribute("exchanges", exchanges);
 
         return "chart";
     }
 
     @ResponseBody
     @PostMapping("/coin")
-    public List<Coin> getCoin(String ticker) {
-        List<Coin> coin = coinService.getCoin(ticker);
+    public List<Coin> getCoin(String ticker, String exchange) {
+        List<Coin> coin = coinService.getCoin(ticker, exchange);
         log.info("coin={}", coin);
 
         return coin;

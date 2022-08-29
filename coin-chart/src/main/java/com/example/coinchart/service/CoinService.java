@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface CoinService {
 
-    List<Coin> getCoin(String market);
+    List<Coin> getCoin(String market, String exchange);
 
     List<Coin> getCoins();
 
