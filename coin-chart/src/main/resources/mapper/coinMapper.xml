@@ -1,45 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.coinchart.repository.CoinMapper">
+<mapper namespace="coinchart.coin.repository.CoinMapper">
 
-    <insert id="save">
-        insert into coin (currency_code, market, trade_price, _date)
-        values (#{currencyCode}, #{market}, #{tradePrice}, #{date})
+    <insert id="saveCoin" parameterType="coinchart.coin.domain.Coin$Request">
+        <![CDATA[
+        insert into coin (market, trade_price, save_datetime)
+        values (#{market}, #{tradePrice}, #{saveDateTime})
+        ]]>
     </insert>
 
-    <select id="getCoin" resultType="Coin">
-        select *
+    <select id="getCoin" parameterType="String" resultType="coinchart.coin.domain.Coin$ResponseDB">
+        <![CDATA[
+        select market, trade_price, save_datetime
         from coin
-        where market = #{market}
-        order by _date asc
+        where market = #{ticker}
+        order by save_datetime asc
+        ]]>
     </select>
 
-    <select id="getCoins" resultType="Coin">
-        select *
+    <select id="getCoins" resultType="coinchart.coin.domain.Coin$ResponseDB">
+        <![CDATA[
+        select market, trade_price, save_datetime
         from coin
-        where (market, _date) in (select market, max(_date) as _date from coin
-        group by market);
+        where (market, save_datetime) in (select market, max(save_datetime) as save_datetime from coin group by market)
+        ]]>
     </select>
 
-    <insert id="saveExchange">
-        insert into exchange(currency_code, base_price, us_dollar_rate, _date, _time)
+    <insert id="saveExchanges" parameterType="coinchart.coin.feignclient.dto.Exchange$Request">
+        <![CDATA[
+        insert into exchange(currency_code, base_price, us_dollar_rate, save_date, save_time)
         values (#{currencyCode}, #{basePrice}, #{usDollarRate}, #{date}, #{time})
+        ]]>
     </insert>
 
-    <update id="updateExchange">
+    <update id="updateExchanges" parameterType="coinchart.coin.feignclient.dto.Exchange$Request">
+        <![CDATA[
         update exchange
-        set base_price = #{basePrice}, _date = #{date}, _time = #{time}
+        set base_price     = #{basePrice},
+            us_dollar_rate = ${usDollarRate},
+            save_date      = #{date},
+            save_time      = #{time}
         where currency_code = #{currencyCode}
+        ]]>
     </update>
 
-    <select id="getExchange" resultType="Exchange">
-        select * from exchange where currency_code = #{currencyCode}
+    <select id="getExchange" parameterType="String" resultType="coinchart.coin.feignclient.dto.Exchange$Response">
+        <![CDATA[
+        select currency_code, base_price
+        from exchange
+        where currency_code = #{currencyCode}
+        ]]>
     </select>
 
-    <select id="getExchanges" resultType="Exchange">
-        select *
-        from exchange;
+    <select id="getExchanges" resultType="coinchart.coin.feignclient.dto.Exchange$Response">
+        <![CDATA[
+        select currency_code, base_price
+        from exchange
+        ]]>
     </select>
 
 </mapper>
