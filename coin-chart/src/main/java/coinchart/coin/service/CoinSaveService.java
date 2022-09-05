@@ -11,11 +11,13 @@ import coinchart.coin.repository.CoinMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class CoinSaveService {
@@ -26,7 +28,6 @@ public class CoinSaveService {
     private final TickerFeignClient tickerFeignClient;
 
     @Scheduled(cron = "0 */30 * * * *") // every 30m
-//    @Scheduled(cron = "*/30 * * * * *") // every 30s
     public void save() {
 
         //save exchange

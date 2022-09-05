@@ -118,6 +118,7 @@ public class CoinServiceImpl implements CoinService {
             if (exchange.getCurrencyCode().equals("JPY")) {
                 //(1USD : KRW) / ((100JPY : KRW) / JPY100)
                 double usd_jpy = Double.parseDouble(String.format("%.2f", (krw_usd / (Double.parseDouble(exchange.getBasePrice()) / 100))));
+
                 store.put(exchange.getCurrencyCode(), usd_jpy);
             }
         }

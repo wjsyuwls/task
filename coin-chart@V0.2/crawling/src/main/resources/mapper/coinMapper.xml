@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.crawling.repository.CoinMapper">
+
+    <select id="getExchanges" resultType="Exchange">
+        <![CDATA[
+        select currency_code, base_price
+        from exchange
+        ]]>
+    </select>
+
+    <insert id="saveExchanges" parameterType="Exchange">
+        <![CDATA[
+        insert into exchange(currency_code, base_price, us_dollar_rate, save_date, save_time)
+        values (#{currencyCode}, #{basePrice}, #{usDollarRate}, #{date}, #{time})
+        ]]>
+    </insert>
+
+    <update id="updateExchanges" parameterType="Exchange">
+        <![CDATA[
+        update exchange
+        set base_price     = #{basePrice},
+            us_dollar_rate = ${usDollarRate},
+            save_date      = #{date},
+            save_time      = #{time}
+        where currency_code = #{currencyCode}
+        ]]>
+    </update>
+
+    <insert id="saveCoin" parameterType="Coin">
+        <![CDATA[
+        insert into coin (market, trade_price, save_datetime)
+        values (#{market}, #{tradePrice}, #{saveDateTime})
+        ]]>
+    </insert>
+
+</mapper>
