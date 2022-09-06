@@ -1,15 +1,22 @@
 package com.example.crawling.repository;
 
+import com.example.crawling.dto.Coin;
 import com.example.crawling.dto.Exchange;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Optional;
 
+@Mapper
 public interface CoinMapper {
 
     List<Exchange> getExchanges();
 
-    void saveExchanges(Exchange exchange);
+    void saveExchange(Exchange exchange);
 
-    void updateExchanges(Exchange exchange);
+    void updateExchange(Exchange exchange);
+
+    Optional<Exchange> getExchange(String currencyCode);
+
+    void saveCoin(Coin coin);
 }

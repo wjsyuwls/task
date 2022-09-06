@@ -10,14 +10,14 @@
         ]]>
     </select>
 
-    <insert id="saveExchanges" parameterType="Exchange">
+    <insert id="saveExchange" parameterType="Exchange">
         <![CDATA[
         insert into exchange(currency_code, base_price, us_dollar_rate, save_date, save_time)
         values (#{currencyCode}, #{basePrice}, #{usDollarRate}, #{date}, #{time})
         ]]>
     </insert>
 
-    <update id="updateExchanges" parameterType="Exchange">
+    <update id="updateExchange" parameterType="Exchange">
         <![CDATA[
         update exchange
         set base_price     = #{basePrice},
@@ -30,8 +30,8 @@
 
     <insert id="saveCoin" parameterType="Coin">
         <![CDATA[
-        insert into coin (market, trade_price, save_datetime)
-        values (#{market}, #{tradePrice}, #{saveDateTime})
+        insert into coin (symbol, price, save_datetime)
+        values (#{symbol}, #{price}, #{saveDateTime})
         ]]>
     </insert>
 

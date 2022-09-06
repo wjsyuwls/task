@@ -38,6 +38,7 @@ public class CoinSaveService {
         for (Exchange.Request exchange : exchanges) {
             if (dbExchanges.size() == 0) {  //first
                 coinMapper.saveExchanges(exchange);
+
             } else {
                 coinMapper.updateExchanges(exchange);
             }

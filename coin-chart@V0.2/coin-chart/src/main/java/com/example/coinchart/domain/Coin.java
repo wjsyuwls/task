@@ -1,4 +1,4 @@
-package com.example.crawling.dto;
+package com.example.coinchart.domain;
 
 import lombok.Data;
 

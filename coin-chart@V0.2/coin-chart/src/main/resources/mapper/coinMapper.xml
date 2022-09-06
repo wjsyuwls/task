@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.coinchart.repository.CoinMapper">
+
+    <select id="getExchanges" resultType="Exchange">
+        <![CDATA[
+        select currency_code, base_price
+        from exchange
+        ]]>
+    </select>
+
+    <select id="getExchange" parameterType="String" resultType="Exchange">
+        <![CDATA[
+        select currency_code, base_price
+        from exchange
+        where currency_code = #{currencyCode}
+        ]]>
+    </select>
+
+    <select id="getCoins" resultType="Coin">
+        <![CDATA[
+        select symbol, price, save_datetime
+        from coin
+        where (symbol, save_datetime) in (select symbol, max(save_datetime) as save_datetime from coin group by symbol)
+        ]]>
+    </select>
+
+    <select id="getCoin" parameterType="String" resultType="Coin">
+        <![CDATA[
+        select symbol, price, save_datetime
+        from coin
+        where symbol = #{symbol}
+        order by save_datetime asc
+        ]]>
+    </select>
+
+</mapper>
