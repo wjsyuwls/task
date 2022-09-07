@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class CoinController {
 
     @GetMapping("/chart")
     public String chart(Model model) {
-        Map<String, Double> exchanges = coinService.getExchanges();
+        Map<String, BigDecimal> exchanges = coinService.getExchanges();
         List<Coin> coins = coinService.getCoins();
         log.info("exchanges={}", exchanges);
         log.info("coins={}", new JSONArray(coins));

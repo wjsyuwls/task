@@ -62,7 +62,7 @@ public class Crawling {
     public void saveCoin() {
         //assume usdt = usd
         //default usd
-        String[] ticker = {"BTCUSDT", "ETHUSDT", "BCHUSDT", "LTCUSDT", "SOLUSDT"};
+        String[] ticker = {"BTCUSDT", "ETHUSDT", "BCHUSDT", "LTCUSDT", "SOLUSDT", "ETCUSDT"};
 
         String localDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 

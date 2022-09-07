@@ -13,12 +13,14 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
+@SpringBootTest
 class CrawlingTest {
 
     @Autowired
@@ -34,7 +36,9 @@ class CrawlingTest {
 
     @Test
     public void saveCoin() {
-        String[] ticker = {"BTCUSDT", "ETHUSDT", "BCHUSDT", "LTCUSDT", "SOLUSDT"};
+        //assume usdt = usd
+        //default usd
+        String[] ticker = {"BTCUSDT", "ETHUSDT", "BCHUSDT", "LTCUSDT", "SOLUSDT", "ETCUSDT"};
 
         String localDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 

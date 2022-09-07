@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -29,18 +29,22 @@ class CoinServiceImplTest {
 
     @Test
     public void getExchanges() {
-        Map<String, Double> exchangeStore = new HashMap<>();
+        Map<String, BigDecimal> exchangeStore = new HashMap<>();
 
         Exchange USD = coinMapper.getExchange("USD").get();
 
         //1USD : KRW
-        Double USD_KRW = Double.parseDouble(USD.getBasePrice());
+        BigDecimal USD_KRW = new BigDecimal(USD.getBasePrice());
         exchangeStore.put("KRW", USD_KRW);
 
         //JPY100 : KRW -> 1USD : JPY
         //(1USD : KRW) / ((100JPY : KRW) / JPY100)
         Exchange JPY = coinMapper.getExchange("JPY").get();
-        Double USD_JPY = Double.parseDouble(String.format("%.2f", (USD_KRW / (Double.parseDouble(JPY.getBasePrice()) / 100))));
+        BigDecimal JPYBASEPRICE = new BigDecimal(JPY.getBasePrice());
+
+        BigDecimal USD_JPY = USD_KRW.divide((JPYBASEPRICE.divide(new BigDecimal(100))), RoundingMode.HALF_EVEN);
+        log.info("USD_JPY={}", USD_JPY);
+        
         exchangeStore.put("JPY", USD_JPY);
 
         log.info("환율={}", exchangeStore);

@@ -16,7 +16,5 @@ public interface CoinMapper {
 
     void updateExchange(Exchange exchange);
 
-    Optional<Exchange> getExchange(String currencyCode);
-
     void saveCoin(Coin coin);
 }

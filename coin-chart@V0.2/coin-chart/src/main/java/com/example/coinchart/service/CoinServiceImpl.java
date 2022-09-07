@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,19 +21,20 @@ public class CoinServiceImpl implements CoinService {
     private final CoinMapper coinMapper;
 
     @Override
-    public Map<String, Double> getExchanges() {
-        Map<String, Double> exchangeStore = new HashMap<>();
+    public Map<String, BigDecimal> getExchanges() {
+        Map<String, BigDecimal> exchangeStore = new HashMap<>();
 
         Exchange USD = coinMapper.getExchange("USD").get();
 
-        Double USD_KRW = Double.parseDouble(USD.getBasePrice());
         //1USD : KRW
+        BigDecimal USD_KRW = new BigDecimal(USD.getBasePrice());
         exchangeStore.put("KRW", USD_KRW);
 
-        Exchange JPY = coinMapper.getExchange("JPY").get();
         //JPY100 : KRW -> 1USD : JPY
         //(1USD : KRW) / ((100JPY : KRW) / JPY100)
-        Double USD_JPY = Double.parseDouble(String.format("%.2f", (USD_KRW / (Double.parseDouble(JPY.getBasePrice()) / 100))));
+        Exchange JPY = coinMapper.getExchange("JPY").get();
+        BigDecimal JPYBASEPRICE = new BigDecimal(JPY.getBasePrice());
+        BigDecimal USD_JPY = USD_KRW.divide((JPYBASEPRICE.divide(new BigDecimal(100))), RoundingMode.HALF_EVEN);
         exchangeStore.put("JPY", USD_JPY);
 
         return exchangeStore;
